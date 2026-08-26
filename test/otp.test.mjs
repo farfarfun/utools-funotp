@@ -1,0 +1,82 @@
+import assert from 'node:assert/strict'
+import test from 'node:test'
+import { base32Decode, base32Encode, isValidSecret, normalizeSecret } from '../src/lib/base32.mjs'
+import { counterAt, formatCode, generateAccountCode, generateOtp, remainingSeconds } from '../src/lib/otp.mjs'
+
+const encoder = new TextEncoder()
+// RFC 4226 / 6238 的测试密钥都是这串 ASCII 重复到所需长度。
+const seed = length => base32Encode(encoder.encode('12345678901234567890'.repeat(4).slice(0, length)))
+const SHA1_SEED = seed(20)
+const SHA256_SEED = seed(32)
+const SHA512_SEED = seed(64)
+
+test('base32 编解码可往返，并容忍空格、小写与填充', () => {
+  assert.equal(base32Encode(encoder.encode('12345678901234567890')), 'GEZDGNBVGY3TQOJQGEZDGNBVGY3TQOJQ')
+  assert.equal(normalizeSecret(' gezd gnbv-gy3t qojq== '), 'GEZDGNBVGY3TQOJQ')
+  assert.deepEqual(base32Decode('gezdgnbv'), base32Decode('GEZD GNBV'))
+  assert.equal(isValidSecret('GEZDGNBV1'), false, '1 不在 base32 字母表里')
+  assert.equal(isValidSecret(''), false)
+})
+
+test('HOTP 与 RFC 4226 附录 D 的测试向量一致', async () => {
+  const expected = ['755224', '287082', '359152', '969429', '338314', '254676', '287922', '162583', '399871', '520489']
+  for (const [counter, code] of expected.entries()) {
+    assert.equal(await generateOtp({ secret: SHA1_SEED, counter }), code, `counter=${counter}`)
+  }
+})
+
+test('TOTP 与 RFC 6238 附录 B 的测试向量一致', async () => {
+  const cases = [
+    [59, 'SHA1', SHA1_SEED, '94287082'],
+    [59, 'SHA256', SHA256_SEED, '46119246'],
+    [59, 'SHA512', SHA512_SEED, '90693936'],
+    [1111111109, 'SHA1', SHA1_SEED, '07081804'],
+    [1111111111, 'SHA1', SHA1_SEED, '14050471'],
+    [1234567890, 'SHA1', SHA1_SEED, '89005924'],
+    [1111111109, 'SHA256', SHA256_SEED, '68084774'],
+    [2000000000, 'SHA1', SHA1_SEED, '69279037'],
+    [2000000000, 'SHA256', SHA256_SEED, '90698825'],
+    [20000000000, 'SHA1', SHA1_SEED, '65353130'],
+    // 这一条的计数器超过 2^32，用来确认 8 字节计数器没有丢高位。
+    [20000000000, 'SHA512', SHA512_SEED, '47863826'],
+  ]
+  for (const [seconds, algorithm, secret, code] of cases) {
+    const counter = counterAt(seconds * 1000, 30)
+    assert.equal(await generateOtp({ secret, algorithm, digits: 8, counter }), code, `${algorithm}@${seconds}`)
+  }
+})
+
+test('generateAccountCode 按账号类型选计数器', async () => {
+  const totp = { secret: SHA1_SEED, algorithm: 'SHA1', digits: 8, period: 30, type: 'totp' }
+  assert.equal(await generateAccountCode(totp, 59_000), '94287082')
+
+  const hotp = { secret: SHA1_SEED, type: 'hotp', digits: 6, counter: 3 }
+  assert.equal(await generateAccountCode(hotp, Date.now()), '969429', 'HOTP 与时间无关')
+})
+
+test('Steam 令牌是 5 位专用字母表', async () => {
+  const code = await generateOtp({ secret: SHA1_SEED, encoding: 'steam', counter: 1 })
+  assert.equal(code.length, 5)
+  assert.match(code, /^[23456789BCDFGHJKMNPQRTVWXY]+$/)
+})
+
+test('倒计时按周期回绕', () => {
+  assert.equal(remainingSeconds(0, 30), 30)
+  assert.equal(remainingSeconds(1_000, 30), 29)
+  assert.equal(remainingSeconds(29_000, 30), 1)
+  assert.equal(remainingSeconds(30_000, 30), 30)
+  assert.equal(remainingSeconds(45_000, 60), 15)
+})
+
+test('异常参数被夹到合法范围而不是抛错', async () => {
+  assert.equal((await generateOtp({ secret: SHA1_SEED, digits: 99, counter: 0 })).length, 10)
+  assert.equal((await generateOtp({ secret: SHA1_SEED, digits: 0, counter: 0 })).length, 4)
+  assert.equal(counterAt(59_000, 0), counterAt(59_000, 30), '周期为 0 时回落到默认 30 秒')
+})
+
+test('验证码按位数分组显示', () => {
+  assert.equal(formatCode('123456'), '123 456')
+  assert.equal(formatCode('12345678'), '1234 5678')
+  assert.equal(formatCode('123456', false), '123456')
+  assert.equal(formatCode('2K9FH'), '2K9FH', 'Steam 码不分组')
+})

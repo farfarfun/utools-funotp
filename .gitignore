@@ -1,0 +1,5 @@
+/dist/
+/node_modules/
+
+# 本地测试用的真实 TOTP 密钥，只限开发使用，禁止提交
+/data/

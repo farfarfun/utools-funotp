@@ -1,0 +1,28 @@
+<svg viewBox="0 0 79 86" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="empty-dark-a" x1="38.8503086%" y1="0%" x2="61.1496914%" y2="100%">
+      <stop stop-color="#4b4b52" />
+      <stop offset="100%" stop-color="#262629" />
+    </linearGradient>
+    <linearGradient id="empty-dark-b" x1="0%" y1="9.5%" x2="100%" y2="90.5%">
+      <stop stop-color="#4b4b52" />
+      <stop offset="100%" stop-color="#212224" />
+    </linearGradient>
+    <rect id="empty-dark-mask" width="17" height="36" />
+    <clipPath id="empty-dark-clip"><use href="#empty-dark-mask" /></clipPath>
+  </defs>
+  <path d="M39.5 86C61.315 86 79 83.911 79 81.333S57.315 78 35.5 78 0 78.756 0 81.333 17.685 86 39.5 86Z" fill="#1e1e20" />
+  <polygon points="13 58 53 58 42 45 2 45" fill="#1b1c1f" transform="translate(0 103) scale(1 -1)" />
+  <g transform="translate(62 10) scale(-1 1) rotate(-25 27.5 21.5)">
+    <polygon points="0 3 18 3 23 7 5 7" fill="#1b1c1f" transform="translate(0 10) scale(1 -1)" />
+    <polygon points="0 7 38 7 38 43 0 43" fill="#202124" />
+    <rect x="38" y="7" width="17" height="36" fill="url(#empty-dark-a)" transform="translate(93 0) scale(-1 1)" />
+    <polygon points="24 7 41 7 55 0 38 0" fill="#36383d" transform="translate(79 0) scale(-1 1)" />
+  </g>
+  <rect x="13" y="45" width="40" height="36" fill="url(#empty-dark-b)" />
+  <g transform="translate(70 45) scale(-1 1)">
+    <use href="#empty-dark-mask" fill="#1c1d1f" />
+    <polygon points="7 0 24 0 20 18 7 16.5" fill="#18181a" clip-path="url(#empty-dark-clip)" transform="translate(24 0) scale(-1 1)" />
+  </g>
+  <polygon points="62 45 79 45 70 58 53 58" fill="#36383d" transform="translate(132 0) scale(-1 1)" />
+</svg>
