@@ -18,10 +18,10 @@ uTools 两步验证码插件 — 本地管理多个 TOTP 账号，离线生成 G
 npm install
 npm test          # 跑 RFC 测试向量与状态迁移测试
 npm run dev       # 浏览器预览，数据落在 localStorage
-npm run build     # 产出 dist/，uTools 加载的是这一份
+npm run build     # 产出 utools/dist/，uTools 加载的是这一份
 ```
 
-在 uTools 开发者工具里导入本目录的 `plugin.json` 即可调试。
+在 uTools 开发者工具里导入 `utools/plugin.json` 即可调试，也可以运行 `utools/build.sh` 完成测试和构建。
 
 ### `data/` 目录
 
@@ -37,7 +37,7 @@ npm run build     # 产出 dist/，uTools 加载的是这一份
 ## 结构
 
 ```
-preload.js            uTools 预加载：文件读写、WebDav
+utools/                uTools 清单、预加载脚本、图标与构建脚本
 src/lib/base32.mjs    Base32 编解码
 src/lib/otp.mjs       HOTP / TOTP 计算
 src/lib/otpauth.mjs   otpauth 链接与迁移二维码的解析、生成
