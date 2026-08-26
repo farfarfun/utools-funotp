@@ -1,5 +1,49 @@
+
+# ---- farfarfun 组织约定 (SPEC §10) ----
+# 服务脚本的运行时文件：日志 / PID / lock
+.run/
+logs/
+*.log
+
+# 本地数据库与压缩包不进版本管理，确需版本化走 Git LFS
+*.db
+*.sqlite
+*.sqlite3
+*.rar
+*.7z
+
+# 构建产物（无前导斜杠，任意层级都匹配，含 utools/dist/）
+dist/
+build/
+
+# 编辑器 / IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# 凭据：绝不提交
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+
+# ---- 前端 / uTools 插件 ----
+# SPEC §13.4: utools/ 目录本身要提交（plugin.json / preload.js / logo.png 是源文件），
+# 只有 utools/dist/ 是构建产物。上面的 dist/ 已覆盖，这里显式写一遍避免被误改。
+utools/dist/
+node_modules/
+.pnpm-store/
+.vite/
+.turbo/
+*.tsbuildinfo
+pnpm-debug.log*
+npm-debug.log*
+yarn-error.log*
+
+# ---- 本仓库原有的自定义规则（合并时保留）----
 /utools/dist/
 /node_modules/
-
-# 本地测试用的真实 TOTP 密钥，只限开发使用，禁止提交
 /data/
