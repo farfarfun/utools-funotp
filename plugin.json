@@ -1,0 +1,47 @@
+{
+  "pluginName": "FunOTP",
+  "version": "1.0.0",
+  "description": "本地管理两步验证账号，离线生成 TOTP / HOTP 动态验证码",
+  "author": "farfarfun",
+  "main": "dist/index.html",
+  "preload": "preload.js",
+  "logo": "logo.png",
+  "pluginSetting": {
+    "height": 1
+  },
+  "features": [
+    {
+      "code": "funotp",
+      "explain": "管理两步验证账号并复制动态验证码",
+      "icon": "logo.png",
+      "cmds": ["FunOTP", "两步验证", "动态验证码", "验证码", "otp", "totp", "2fa"]
+    },
+    {
+      "code": "search-otp",
+      "explain": "搜索账号并直接复制验证码",
+      "icon": "search.png",
+      "cmds": [
+        {
+          "type": "over",
+          "label": "搜索验证码",
+          "minLength": 1,
+          "maxLength": 40
+        }
+      ],
+      "mainPush": true
+    },
+    {
+      "code": "add-otp",
+      "explain": "把 otpauth 链接添加到 FunOTP",
+      "icon": "logo.png",
+      "cmds": [
+        {
+          "type": "regex",
+          "label": "添加两步验证账号",
+          "match": "/^otpauth(-migration)?:\\/\\//"
+        }
+      ]
+    }
+  ],
+  "platform": ["darwin", "win32", "linux"]
+}
