@@ -131,8 +131,11 @@ export function useFunOtp() {
       saveState()
       refreshCodes()
     }
-    if (state.value.settings.copy.outPlugin && window.utools?.outPlugin) window.utools.outPlugin()
-    else showToast(`已复制 ${accountLabel(account)} 的验证码`)
+    if (state.value.settings.copy.outPlugin && window.utools?.outPlugin) {
+      // outPlugin 只退出插件视图，uTools 主搜索框还会弹出来，得先隐藏主窗口才算彻底关掉。
+      window.utools?.hideMainWindow?.()
+      window.utools.outPlugin()
+    } else showToast(`已复制 ${accountLabel(account)} 的验证码`)
   }
 
   function saveAccount(input) {
@@ -348,6 +351,7 @@ export function useFunOtp() {
         if (!account) return
         await refreshCodes()
         copyText(codeOf(account).code)
+        window.utools?.hideMainWindow?.()
         window.utools?.outPlugin?.()
         return
       }
