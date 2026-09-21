@@ -15,13 +15,23 @@ uTools 两步验证码插件 — 本地管理多个 TOTP 账号，离线生成 G
 ## 开发
 
 ```bash
-npm install
-npm test          # 跑 RFC 测试向量与状态迁移测试
-npm run dev       # 浏览器预览，数据落在 localStorage
-npm run build     # 产出 utools/dist/，uTools 加载的是这一份
+pnpm install
+pnpm test          # 跑 RFC 测试向量与状态迁移测试
+pnpm run dev       # 浏览器预览，数据落在 localStorage
+sh build.sh        # 校验并产出 utools/dist/
 ```
 
-在 uTools 开发者工具里导入 `utools/plugin.json` 即可调试，也可以运行 `utools/build.sh` 完成测试和构建。
+在 uTools 开发者工具里导入 `utools/plugin.json` 即可调试。
+
+### 最小使用示例
+
+将验证码链接粘贴到 uTools 输入框：
+
+```text
+otpauth://totp/GitHub:me@example.com?secret=JBSWY3DPEHPK3PXP&issuer=GitHub
+```
+
+选择“添加两步验证账号”后，搜索账号并回车即可复制当前验证码。
 
 ### `data/` 目录
 
@@ -47,3 +57,9 @@ src/lib/state.mjs     状态 schema 与加载
 src/composables/      界面状态与 uTools 集成
 src/components/       Vue 组件
 ```
+
+## 关于 farfarfun
+
+farfarfun 是一个专注于实用工具与开发者效率的开源组织，致力于把想法做成简单可靠的工具。
+
+本项目基于 [MIT](LICENSE) 协议开源。

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import test from 'node:test'
+import { test } from 'vitest'
 import { base32Decode, base32Encode, isValidSecret, normalizeSecret } from '../src/lib/base32.mjs'
 import { counterAt, formatCode, generateAccountCode, generateOtp, remainingSeconds } from '../src/lib/otp.mjs'
 

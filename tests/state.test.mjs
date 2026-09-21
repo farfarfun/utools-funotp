@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import test from 'node:test'
+import { test } from 'vitest'
 import { accountKey, accountLabel, initials, migrateState, moveItem, normalizeAccount, validateState } from '../src/lib/core.mjs'
 import { DEFAULT_SETTINGS, STORAGE_KEY, emptyState, hydrateState, loadState, prepareState } from '../src/lib/state.mjs'
 

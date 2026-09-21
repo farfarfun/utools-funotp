@@ -54,7 +54,6 @@ export function loadState({ read }) {
   try {
     saved = read(STORAGE_KEY)
   } catch (error) {
-    console.error(error)
     return { state: emptyState(), blocked: `本地数据读取失败：${error.message}。`, dropped: 0 }
   }
   if (!saved) return { state: emptyState(), blocked: '', dropped: 0 }
@@ -62,7 +61,6 @@ export function loadState({ read }) {
     const { state, dropped } = prepareState(saved)
     return { state, blocked: '', dropped }
   } catch (error) {
-    console.error(error)
     return { state: emptyState(), blocked: `本地数据无法解析：${error.message}。`, dropped: 0 }
   }
 }

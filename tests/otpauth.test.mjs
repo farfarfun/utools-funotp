@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import test from 'node:test'
+import { test } from 'vitest'
 import { buildOtpauthUri, parseMigrationUri, parseOtpauthText, parseOtpauthUri } from '../src/lib/otpauth.mjs'
 
 test('解析标准 otpauth 链接', () => {
