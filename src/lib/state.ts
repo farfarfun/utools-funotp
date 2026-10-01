@@ -1,4 +1,4 @@
-import { migrateState, validateState } from './core.mjs'
+import { migrateState, validateState } from './core'
 
 // 纯状态逻辑：不依赖 vue / uTools，方便直接跑单测。
 export const STORAGE_KEY = 'funotp-state-v1'

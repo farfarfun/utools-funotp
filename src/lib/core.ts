@@ -1,5 +1,5 @@
-import { isValidSecret, normalizeSecret } from './base32.mjs'
-import { DEFAULT_DIGITS, DEFAULT_PERIOD, normalizeDigits, normalizePeriod } from './otp.mjs'
+import { isValidSecret, normalizeSecret } from './base32'
+import { DEFAULT_DIGITS, DEFAULT_PERIOD, normalizeDigits, normalizePeriod } from './otp'
 
 export const COLORS = ['#16b8c7', '#2563eb', '#7c3aed', '#db2777', '#e85d3f', '#0f9f6e', '#f59e0b', '#64748b']
 

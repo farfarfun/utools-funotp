@@ -1,6 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue'
-import { accountLabel, initials, safeColor } from '../lib/core.mjs'
+import { accountLabel, initials, safeColor } from '../lib/core'
 
 const props = defineProps({
   account: { type: Object, required: true },

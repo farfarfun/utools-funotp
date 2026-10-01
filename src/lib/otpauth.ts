@@ -1,5 +1,5 @@
-import { base32Encode, isValidSecret, normalizeSecret } from './base32.mjs'
-import { DEFAULT_DIGITS, DEFAULT_PERIOD, normalizeDigits, normalizePeriod } from './otp.mjs'
+import { base32Encode, isValidSecret, normalizeSecret } from './base32'
+import { DEFAULT_DIGITS, DEFAULT_PERIOD, normalizeDigits, normalizePeriod } from './otp'
 
 const SUPPORTED_ALGORITHMS = new Set(['SHA1', 'SHA256', 'SHA512'])
 

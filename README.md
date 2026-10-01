@@ -48,18 +48,24 @@ otpauth://totp/GitHub:me@example.com?secret=JBSWY3DPEHPK3PXP&issuer=GitHub
 
 ```
 utools/                uTools 清单、预加载脚本、图标与构建脚本
-src/lib/base32.mjs    Base32 编解码
-src/lib/otp.mjs       HOTP / TOTP 计算
-src/lib/otpauth.mjs   otpauth 链接与迁移二维码的解析、生成
-src/lib/qr.js         二维码识别与生成
-src/lib/core.mjs      账号规范化、校验、迁移
-src/lib/state.mjs     状态 schema 与加载
+src/lib/base32.ts     Base32 编解码
+src/lib/otp.ts        HOTP / TOTP 计算
+src/lib/otpauth.ts    otpauth 链接与迁移二维码的解析、生成
+src/lib/qr.ts         二维码识别与生成
+src/lib/core.ts       账号规范化、校验、迁移
+src/lib/state.ts      状态 schema 与加载
 src/composables/      界面状态与 uTools 集成
 src/components/       Vue 组件
 ```
 
+---
+
 ## 关于 farfarfun
 
-farfarfun 是一个专注于实用工具与开发者效率的开源组织，致力于把想法做成简单可靠的工具。
+[farfarfun](https://github.com/farfarfun) 是一个专注于实用工具库的开源组织，
+涵盖云存储、数据处理、AI、多媒体与开发工具链等方向。
+
+- 🏠 组织主页：<https://github.com/farfarfun>
+- 📧 联系：farfarfun@qq.com
 
 本项目基于 [MIT](LICENSE) 协议开源。

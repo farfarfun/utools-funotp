@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import AccountDialog from './components/AccountDialog.vue'
 import AccountGrid from './components/AccountGrid.vue'
@@ -7,8 +7,8 @@ import ContextMenu from './components/ContextMenu.vue'
 import GroupDialog from './components/GroupDialog.vue'
 import QrDialog from './components/QrDialog.vue'
 import SettingsDialog from './components/SettingsDialog.vue'
-import { useFunOtp } from './composables/useFunOtp.js'
-import { accountLabel } from './lib/core.mjs'
+import { useFunOtp } from './composables/useFunOtp'
+import { accountLabel } from './lib/core'
 
 const otp = useFunOtp()
 const { state, storageError, toast, groups, activeGroupId, trashCount, currentAccounts } = otp

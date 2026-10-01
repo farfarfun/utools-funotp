@@ -1,9 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import { computed, nextTick, reactive, ref, watch } from 'vue'
-import { COLORS, colorFor, initials, safeColor } from '../lib/core.mjs'
-import { formatCode, generateOtp } from '../lib/otp.mjs'
-import { parseOtpauthText } from '../lib/otpauth.mjs'
-import { decodeQrImage, readClipboardImage } from '../lib/qr.js'
+import { COLORS, colorFor, initials, safeColor } from '../lib/core'
+import { formatCode, generateOtp } from '../lib/otp'
+import { parseOtpauthText } from '../lib/otpauth'
+import { decodeQrImage, readClipboardImage } from '../lib/qr'
 
 const props = defineProps({
   groups: { type: Array, default: () => [] },

@@ -1,9 +1,9 @@
 import { computed, onBeforeUnmount, reactive, ref } from 'vue'
-import { accountKey, accountLabel, accountMatches, createId, moveItem, normalizeAccount } from '../lib/core.mjs'
-import { counterAt, formatCode, generateOtp, remainingSeconds } from '../lib/otp.mjs'
-import { buildOtpauthUri, parseOtpauthText } from '../lib/otpauth.mjs'
-import { STORAGE_KEY, loadState, prepareState } from '../lib/state.mjs'
-import { readStorage, writeStorage } from '../lib/storage.js'
+import { accountKey, accountLabel, accountMatches, createId, moveItem, normalizeAccount } from '../lib/core'
+import { counterAt, formatCode, generateOtp, remainingSeconds } from '../lib/otp'
+import { buildOtpauthUri, parseOtpauthText } from '../lib/otpauth'
+import { STORAGE_KEY, loadState, prepareState } from '../lib/state'
+import { readStorage, writeStorage } from '../lib/storage'
 
 // 界面每 250 毫秒对一次时间，倒计时圆环才走得顺，验证码也能在整点秒立刻翻新。
 const TICK_MS = 250
@@ -314,7 +314,7 @@ export function useFunOtp() {
     return added
   }
 
-  function processDataFile(type, content, options = {}) {
+  function processDataFile(type, content, options: { groupId?: string } = {}) {
     try {
       if (type === 'restore') {
         const { state: restored, dropped } = prepareState(JSON.parse(content))

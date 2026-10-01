@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import AccountCard from './AccountCard.vue'
 import emptyImage from '../assets/empty.svg'
 import emptyDarkImage from '../assets/empty-dark.svg'

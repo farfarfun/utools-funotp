@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { nextTick, ref } from 'vue'
 
 const props = defineProps({

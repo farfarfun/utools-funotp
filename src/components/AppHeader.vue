@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 defineProps({
   groups: { type: Array, required: true },
   currentView: { type: String, required: true },

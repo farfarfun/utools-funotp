@@ -1,6 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { readStorage, writeStorage } from '../lib/storage.js'
+import { readStorage, writeStorage } from '../lib/storage'
 
 const props = defineProps({
   settings: { type: Object, required: true },

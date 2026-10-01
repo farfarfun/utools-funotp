@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { test } from 'vitest'
-import { buildOtpauthUri, parseMigrationUri, parseOtpauthText, parseOtpauthUri } from '../src/lib/otpauth.mjs'
+import { buildOtpauthUri, parseMigrationUri, parseOtpauthText, parseOtpauthUri } from '../src/lib/otpauth'
 
 test('解析标准 otpauth 链接', () => {
   const account = parseOtpauthUri('otpauth://totp/GitHub:tau-niu?secret=BZJZM4KT4Z7JHKOC&issuer=GitHub')

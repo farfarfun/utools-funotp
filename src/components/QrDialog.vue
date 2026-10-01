@@ -1,8 +1,8 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
-import { accountLabel } from '../lib/core.mjs'
-import { buildOtpauthUri } from '../lib/otpauth.mjs'
-import { toQrDataUrl } from '../lib/qr.js'
+import { accountLabel } from '../lib/core'
+import { buildOtpauthUri } from '../lib/otpauth'
+import { toQrDataUrl } from '../lib/qr'
 
 const emit = defineEmits(['copy', 'message'])
 const dialog = ref(null)

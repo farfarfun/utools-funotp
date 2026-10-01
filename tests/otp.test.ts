@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'vitest'
-import { base32Decode, base32Encode, isValidSecret, normalizeSecret } from '../src/lib/base32.mjs'
-import { counterAt, formatCode, generateAccountCode, generateOtp, remainingSeconds } from '../src/lib/otp.mjs'
+import { base32Decode, base32Encode, isValidSecret, normalizeSecret } from '../src/lib/base32'
+import { counterAt, formatCode, generateAccountCode, generateOtp, remainingSeconds } from '../src/lib/otp'
 
 const encoder = new TextEncoder()
 // RFC 4226 / 6238 的测试密钥都是这串 ASCII 重复到所需长度。
@@ -26,7 +26,7 @@ test('HOTP 与 RFC 4226 附录 D 的测试向量一致', async () => {
 })
 
 test('TOTP 与 RFC 6238 附录 B 的测试向量一致', async () => {
-  const cases = [
+  const cases: Array<[number, string, string, string]> = [
     [59, 'SHA1', SHA1_SEED, '94287082'],
     [59, 'SHA256', SHA256_SEED, '46119246'],
     [59, 'SHA512', SHA512_SEED, '90693936'],

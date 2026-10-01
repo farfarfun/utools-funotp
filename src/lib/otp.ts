@@ -1,4 +1,4 @@
-import { base32Decode } from './base32.mjs'
+import { base32Decode } from './base32'
 
 // 全部计算都在本地完成，密钥不出设备，也不需要联网。
 export const ALGORITHMS = { SHA1: 'SHA-1', SHA256: 'SHA-256', SHA512: 'SHA-512' }
