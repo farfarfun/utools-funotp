@@ -2,11 +2,20 @@
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
 
 // 用户从网页上抄密钥时经常带上空格、连字符或小写，这里一并容忍。
-export function normalizeSecret(value) {
+/** 将用户输入规范化为无空白、无填充的大写 Base32 密钥。
+ * @param value 待规范化的任意输入。
+ * @returns 规范化后的密钥字符串。
+ */
+export function normalizeSecret(value: unknown): string {
   return String(value || '').toUpperCase().replace(/[\s-]/g, '').replace(/=+$/, '')
 }
 
-export function base32Decode(value) {
+/** 解码 RFC 4648 Base32 密钥。
+ * @param value Base32 密钥。
+ * @returns 解码后的字节。
+ * @throws 密钥为空、过短或含有非法字符时抛出错误。
+ */
+export function base32Decode(value: unknown): Uint8Array {
   const input = normalizeSecret(value)
   if (!input) throw new Error('请输入密钥')
   const bytes = []
@@ -26,7 +35,11 @@ export function base32Decode(value) {
   return Uint8Array.from(bytes)
 }
 
-export function base32Encode(bytes) {
+/** 将字节编码为无填充的 RFC 4648 Base32 字符串。
+ * @param bytes 要编码的字节。
+ * @returns Base32 字符串。
+ */
+export function base32Encode(bytes: Uint8Array): string {
   let output = ''
   let buffer = 0
   let bits = 0
@@ -42,7 +55,11 @@ export function base32Encode(bytes) {
   return output
 }
 
-export function isValidSecret(value) {
+/** 判断输入是否为可解码的 Base32 密钥。
+ * @param value 待校验的输入。
+ * @returns 密钥有效时为 `true`。
+ */
+export function isValidSecret(value: unknown): boolean {
   try {
     base32Decode(value)
     return true

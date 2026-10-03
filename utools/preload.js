@@ -12,14 +12,16 @@ utools.onPluginEnter(action => {
   else enterQueue.push(action)
 })
 
-function request(url, { method = 'GET', headers = {}, body = '', timeout = 10000, redirects = 3 } = {}) {
+function request(url, { method = 'GET', headers = {}, body = '', timeout = 10000, redirects = 3, origin } = {}) {
   return new Promise((resolve, reject) => {
     const target = new URL(url)
+    const expectedOrigin = origin || target.origin
+    if (target.origin !== expectedOrigin) return reject(new Error('WebDav 不允许跨域重定向'))
     const client = target.protocol === 'https:' ? https : http
     const req = client.request(target, { method, headers }, response => {
       if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location && redirects) {
         response.resume()
-        return resolve(request(new URL(response.headers.location, target).href, { method, headers, body, timeout, redirects: redirects - 1 }))
+        return resolve(request(new URL(response.headers.location, target).href, { method, headers, body, timeout, redirects: redirects - 1, origin: expectedOrigin }))
       }
       const chunks = []
       response.on('data', chunk => chunks.push(chunk))
@@ -40,9 +42,24 @@ function request(url, { method = 'GET', headers = {}, body = '', timeout = 10000
 
 const WEBDAV_DIRECTORY = 'FunOTP'
 
-function webdavTarget(config, file = '') {
+function webdavBase(config) {
   const base = new URL(config.host.endsWith('/') ? config.host : `${config.host}/`)
-  return new URL(`${WEBDAV_DIRECTORY}/${file}`, base).href
+  if (base.protocol !== 'https:') throw new Error('WebDav 服务器必须使用 HTTPS')
+  return base
+}
+
+function webdavTarget(config, file = '') {
+  return new URL(`${WEBDAV_DIRECTORY}/${file}`, webdavBase(config)).href
+}
+
+function webdavFileTarget(config, href) {
+  const base = webdavBase(config)
+  const directory = new URL(`${WEBDAV_DIRECTORY}/`, base)
+  const target = new URL(href, base)
+  if (target.origin !== base.origin || !target.pathname.startsWith(directory.pathname)) {
+    throw new Error('WebDav 文件地址不在已配置的备份目录中')
+  }
+  return target.href
 }
 
 function webdavHeaders(config, extra = {}) {
@@ -109,9 +126,9 @@ window.funotp = {
     })).body
   },
   async webdavRestore(config, href) {
-    return (await request(new URL(href, config.host).href, { headers: webdavHeaders(config) })).body
+    return (await request(webdavFileTarget(config, href), { headers: webdavHeaders(config) })).body
   },
   async webdavDelete(config, href) {
-    await request(new URL(href, config.host).href, { method: 'DELETE', headers: webdavHeaders(config) })
+    await request(webdavFileTarget(config, href), { method: 'DELETE', headers: webdavHeaders(config) })
   },
 }
