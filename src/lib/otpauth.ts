@@ -1,11 +1,13 @@
 import { base32Encode, isValidSecret, normalizeSecret } from './base32'
 import { DEFAULT_DIGITS, DEFAULT_PERIOD, normalizeDigits, normalizePeriod } from './otp'
+import type { OtpAlgorithm } from './otp'
+import type { Account } from './core'
 
 const SUPPORTED_ALGORITHMS = new Set(['SHA1', 'SHA256', 'SHA512'])
 
-function pickAlgorithm(value) {
+function pickAlgorithm(value: unknown): OtpAlgorithm {
   const name = String(value || '').toUpperCase().replace(/[\s-]/g, '')
-  return SUPPORTED_ALGORITHMS.has(name) ? name : 'SHA1'
+  return (SUPPORTED_ALGORITHMS.has(name) ? name : 'SHA1') as OtpAlgorithm
 }
 
 // 标签形如 "Issuer:account"，也可能只有账号名。冒号前后允许有空格。
@@ -16,7 +18,12 @@ function splitLabel(label) {
   return { issuer: text.slice(0, index).trim(), name: text.slice(index + 1).trim() }
 }
 
-export function parseOtpauthUri(uri) {
+/** 解析标准 otpauth 链接为账号数据。
+ * @param uri `otpauth://` 链接。
+ * @returns 解析出的账号数据。
+ * @throws 链接或密钥无效时抛出错误。
+ */
+export function parseOtpauthUri(uri: unknown): Account {
   const input = String(uri || '').trim()
   if (!/^otpauth:\/\//i.test(input)) throw new Error('不是 otpauth:// 链接')
 
@@ -54,7 +61,11 @@ export function parseOtpauthUri(uri) {
   }
 }
 
-export function buildOtpauthUri(account) {
+/** 将账号数据编码为标准 otpauth 链接。
+ * @param account 要导出的账号。
+ * @returns `otpauth://` 链接。
+ */
+export function buildOtpauthUri(account: Account): string {
   const issuer = String(account.issuer || '').trim()
   const name = String(account.name || '').trim()
   const label = issuer ? `${encodeURIComponent(issuer)}:${encodeURIComponent(name)}` : encodeURIComponent(name || 'FunOTP')
@@ -114,7 +125,12 @@ const MIGRATION_ALGORITHMS = { 1: 'SHA1', 2: 'SHA256', 3: 'SHA512' }
 const MIGRATION_DIGITS = { 1: 6, 2: 8 }
 
 // Google Authenticator「导出账号」生成的二维码，内容是 protobuf 打包后的 base64。
-export function parseMigrationUri(uri) {
+/** 解析 Google Authenticator 迁移链接中的全部账号。
+ * @param uri `otpauth-migration://` 链接。
+ * @returns 解析出的账号列表。
+ * @throws 链接或迁移数据无效时抛出错误。
+ */
+export function parseMigrationUri(uri: unknown): Account[] {
   const input = String(uri || '').trim()
   if (!/^otpauth-migration:\/\//i.test(input)) throw new Error('不是 otpauth-migration:// 链接')
   const data = new URL(input).searchParams.get('data')
@@ -147,7 +163,11 @@ export function parseMigrationUri(uri) {
 }
 
 // 从任意文本里捞出所有 otpauth 链接：可以是导出的 txt、也可以是扫码得到的一串内容。
-export function parseOtpauthText(text) {
+/** 从文本中提取并解析全部 OTP 链接。
+ * @param text 包含 OTP 链接的文本。
+ * @returns 成功解析的账号和每条失败原因。
+ */
+export function parseOtpauthText(text: unknown): { accounts: Account[], errors: string[] } {
   const matches = String(text || '').match(/otpauth(-migration)?:\/\/\S+/gi) || []
   const accounts = []
   const errors = []
