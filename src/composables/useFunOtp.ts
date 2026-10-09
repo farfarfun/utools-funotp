@@ -8,7 +8,7 @@ import { readStorage, writeStorage } from '../lib/storage'
 // 界面每 250 毫秒对一次时间，倒计时圆环才走得顺，验证码也能在整点秒立刻翻新。
 const TICK_MS = 250
 
-export function useFunOtp() {
+function createFunOtp() {
   const loaded = loadState({ read: readStorage })
   const state = ref(loaded.state)
   const storageError = ref(loaded.blocked)
@@ -398,4 +398,11 @@ export function useFunOtp() {
     reorderAccounts, setView, groupCount, addGroup, groupAction, cycleTheme, saveSettings,
     exportBackup, exportUris, importAccounts, processDataFile, setupUtools, showToast, refreshCodes,
   }
+}
+
+/** 创建 FunOTP 的响应式界面状态及账号、分组和导入导出操作。
+ * @returns 供应用界面绑定的状态、计算属性和操作函数。
+ */
+export function useFunOtp(): ReturnType<typeof createFunOtp> {
+  return createFunOtp()
 }
